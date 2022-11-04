@@ -1,10 +1,14 @@
-import numpy as np
-from gower_rust import gower
+from typing import Union
 
-def get_gower(arr: np.ndarray) -> np.ndarray:
-  """Compute gower matrix for array where vertical
-  axis correspond to columns of the same dtype."""
+import numpy as np
+import pandas as pd
+from gower_rust import gower_matrix
+
+def get_gower(arr: Union[np.array, pd.DataFrame]) -> np.array:
+  """Prepare data for gower computation + run gower matrix."""
 
   # Ensure columns are consistently marked with correct dtypes
 
-  return gower(arr)
+  # Split the data into categorical and numerical
+
+  return gower_matrix(arr)
