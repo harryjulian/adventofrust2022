@@ -13,8 +13,18 @@ fn read(file_path: String) -> Vec<u32> {
 
 fn main() {
 
+  // Parse .txt file
   let file_path = std::env::args().nth(1).expect("no path given");
   let elves = read(file_path);
-  let solution = elves.last().unwrap().to_string();
-  println!("{solution:?}")
+  
+  // Get Solution 1
+  let solution1 = elves.last().unwrap().to_string();
+
+  // Get Solution 2
+  let last3 = elves.as_slice()[elves.len()-3..].to_vec();
+  let solution2: u32 = last3.iter().map(|&i| i as u32).sum();
+
+  // Print Solutions
+  println!("Solution 1: {solution1:?}");
+  println!("Solution 2: {solution2:?}");
 }
