@@ -1,7 +1,6 @@
 use std::fs;
 use std::hash::Hash;
-use std::collections::{HashSet, HashMap};
-use std::iter::FromIterator;
+use std::collections::HashSet;
 
 fn intersection<T: Eq + Hash>(a: HashSet<char>, b: &HashSet<char>) -> HashSet<char> {
   a.into_iter().filter(|e| b.contains(e)).collect()
@@ -10,17 +9,11 @@ fn intersection<T: Eq + Hash>(a: HashSet<char>, b: &HashSet<char>) -> HashSet<ch
 fn solve_1(backpacks: Vec<&str>) {
 
   // Score
-  let mut priority: i16 = 0;
+  let mut priority: usize = 0;
 
   // Define Mappings
-  let alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".chars();
-  let alphabet = alphabet_chars.collect::<Vec<_>>();
-  let numbers: Vec::<i16> = (1..=52).map(|x| x as i16).collect::<Vec<i16>>();
-
-  // Get mappings into Hashmap
-  let mut map_iter = alphabet.iter().zip(numbers.iter());
-  let mapping: HashMap<&char, &i16> = HashMap::from_iter(map_iter);
-
+  let alphabet: String = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".to_string();
+  
   let mut iter = backpacks;
   for backpack in iter {
     // Split string into compartments
@@ -39,10 +32,11 @@ fn solve_1(backpacks: Vec<&str>) {
     
     // Get Intersections from Hashmaps
     let overlap: Vec<char> = intersection::<char>(a_hash, &b_hash).drain().collect::<Vec<char>>();
-    let out = mapping.get(&overlap[..1]);
+    let mut out = alphabet.find(&overlap[..1]).unwrap();
 
-    // Add to overall
-    priority += out
+    // Add to output
+    out += 1;
+    priority += out;
   }
   
   println!("Solution1: {priority:?}");
@@ -56,6 +50,7 @@ fn main() {
   let backpacks = fs::read_to_string(&file_path).unwrap_or_else(|_| panic!("Error reading file {}.", file_path));
   let backpacks: Vec<&str> = backpacks.split('\n').collect();
 
+  // Solve first part
   let solution1 = solve_1(backpacks);
   
 }
